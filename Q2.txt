@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace timerEvent
+{
+    public delegate void TimerTick(object sender,TickEvent tick);
+
+    public delegate void TimerAlarm(object sender, AlarmEvent alarm);
+    public class TickEvent
+    {
+       public int M {
+            get;
+            set;
+        }
+
+    }
+
+    public class AlarmEvent
+    {
+        public int N
+        {
+            get; set;
+        }
+
+    }
+    public class Timer
+    {
+        public event TimerTick tick;
+
+        public event TimerAlarm alarm;
+
+        public void Tick(int m)
+        {
+            TickEvent tickEvent = new TickEvent()
+            {
+                M = m
+            };
+            tick(this, tickEvent);
+        }
+        public void Alarm(int n)
+        {
+            AlarmEvent alarmEvent = new AlarmEvent()
+            {
+                N = n
+            };
+            alarm (this, alarmEvent);
+        }
+
+    }
+    public class Form {
+        public Timer timer = new Timer();
+
+        public Form()
+        {
+            timer.tick += new TimerTick(func1);
+            timer.alarm += new TimerAlarm(func2);
+        }
+        public void func1(object sender, TickEvent tick)
+        {
+            Console.WriteLine("嘀嗒");
+        }
+        public void func2(object sender, AlarmEvent alarm)
+        {
+            Console.WriteLine("响铃");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Form form = new Form();
+            form.timer.Tick(2);
+            form.timer.Alarm(20);
+
+            Console.ReadKey();
+        }
+    }
+}
