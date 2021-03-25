@@ -1,0 +1,184 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace cs_ThirdWork
+{
+    public class Node<T>
+    {
+        public Node<T> Next
+        {
+            get; set;
+        }
+        public Node<T> Last
+        {
+            get; set;
+        }
+        public T Data
+        {
+            get; set;
+        }
+
+        public Node(T data){
+            Next = null;
+            Last = null;
+            Data = data;
+        }
+    }
+
+    public class List<T>
+    {
+        public Node<T> head;
+
+        public Node<T> tail;
+
+        public Node<T> Head
+        {
+            get => head;
+        }
+
+        public Node<T> Tail
+        {
+            get => tail;
+        }
+
+        public List()
+        {
+            tail = head = null;
+        }
+        //头插法
+        public void addNodeAtHead(T val)
+        {
+            Node<T> newNode = new Node<T>(val);
+
+            if (head==null)
+            {
+                head = newNode;
+
+                head.Next = tail;
+            }
+            else
+            { 
+                newNode.Next = head.Next;
+
+                head.Next = newNode;
+            } 
+
+        }
+        //尾插法
+        public void addNodeAtTail(T val)
+        {
+            Node<T> newNode = new Node<T>(val);
+
+            Node<T> testNode = new Node<T>(val);
+
+            if (tail == null)
+            {
+                tail = newNode;
+
+                tail.Last = head;
+
+            }
+            else
+            {
+                newNode.Last = tail.Last;
+
+                tail.Last = newNode;
+
+            }
+
+        }
+
+        public void ForEach(List<int> list ,Action<int>action)
+        {
+            Node<int> newNode = list.head;
+
+            while (newNode != null)
+            {
+                action(newNode.Data);
+
+                newNode = newNode.Next;
+
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //头插法输出
+
+            List<int> list = new List<int>();
+
+            for (int i = 0; i < 10; i++)
+              {
+                  list.addNodeAtHead(i);
+              }
+
+            Console.WriteLine("头插法:");
+
+            for (Node<int> node = list.Head; node != null; node = node.Next)
+            {
+               Console.Write(node.Data+"  ");
+            }
+
+            
+            //尾插法输出
+
+            List<int> list2 = new List<int>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list2.addNodeAtTail(i);
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine("尾插法:");
+
+            for (Node<int> node = list2.Tail; node!= null; node = node.Last)
+            {
+                Console.Write(node.Data+"  ");
+            }
+
+            Console.WriteLine();
+
+            int sum = 0;
+
+            Console.WriteLine("链表遍历结果:");
+
+            list.ForEach(list, m => Console.Write($"{m}  "));
+
+            list.ForEach(list, m=>sum+=m);
+
+            Console.WriteLine();
+
+            Console.WriteLine($"和为:{sum}");
+
+            int min = list.head.Data;
+
+            int max = list.head.Data;
+
+            list.ForEach(list, m => {
+                if (min > m)
+                {
+                    min = m;
+                }
+                if (max < m)
+                {
+                    min = m;
+                }
+            });
+
+            Console.WriteLine($"最小值为:{min}");
+
+            Console.WriteLine($"最小值为:{min}");
+
+            Console.ReadKey();
+        }
+   
+    }
+}
